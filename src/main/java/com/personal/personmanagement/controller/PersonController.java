@@ -2,6 +2,8 @@ package com.personal.personmanagement.controller;
 
 import com.personal.personmanagement.model.PersonResponse;
 import com.personal.personmanagement.service.PersonService;
+import com.personal.personmanagement.utils.ResponseConverter;
+import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +29,7 @@ public class PersonController {
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<List<PersonResponse>> getPersonsWithPartnerAndChildren() {
+    public ResponseEntity<String> getPersonsWithPartnerAndChildren() {
         try {
             return ResponseEntity.ok(personService.getPersonsWithPartnerAndChildren());
         } catch (Exception e) {

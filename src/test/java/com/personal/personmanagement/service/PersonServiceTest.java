@@ -93,17 +93,18 @@ class PersonServiceTest {
         partner3.addChild(child4);
         partner3.addChild(child5);
 
-        List<Person> persons = Arrays.asList(person1, person2, person3);
+        List<Person> persons = Arrays.asList(person1, person2, person3, partner1, partner2, partner3, child1, child2, child3, child4, child5);
 
         // Mock personRepository to return the test persons
         when(personRepository.findAll()).thenReturn(persons);
 
         // Call the function
-        List<PersonResponse> result = personService.getPersonsWithPartnerAndChildren();
+        String result = personService.getPersonsWithPartnerAndChildren();
 
-        // Check the result
-        assertEquals(1, result.size());
-        assertEquals(result.get(0).getName(), "John");
+        // Id's are null since they are not generated
+        String expectedResult = "SWQsTmFtZSxCaXJ0aERhdGUsUGFyZW50MSxQYXJlbnQyLFBhcnRuZXIKbnVsbCxKb2huLDE5ODAtMDEtMDEsbnVsbCxudWxsLG51bGwKbnVsbCxQYXJ0bmVyMSwxOTgyLTA0LTA0LG51bGwsbnVsbCxudWxs";
+        assertEquals(expectedResult, result);
+
     }
 
     @Test
@@ -119,10 +120,10 @@ class PersonServiceTest {
         when(personRepository.findAll()).thenReturn(persons);
 
         // Call the function
-        List<PersonResponse> result = personService.getPersonsWithPartnerAndChildren();
-
-        // Check the result
-        assertTrue(result.isEmpty());
+        String result = personService.getPersonsWithPartnerAndChildren();
+        // Base64 of only headers
+        String expectedResult = "SWQsTmFtZSxCaXJ0aERhdGUsUGFyZW50MSxQYXJlbnQyLFBhcnRuZXIK";
+        assertEquals(expectedResult, result);
     }
 
 }

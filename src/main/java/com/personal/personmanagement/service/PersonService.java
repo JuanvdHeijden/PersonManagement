@@ -4,6 +4,7 @@ import com.personal.personmanagement.model.BasicInformation;
 import com.personal.personmanagement.model.Person;
 import com.personal.personmanagement.model.PersonResponse;
 import com.personal.personmanagement.repository.PersonRepository;
+import com.personal.personmanagement.utils.ResponseConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,8 +47,15 @@ public class PersonService {
      *
      * @return         	A list of all persons that comply with the query above
      */
-    public List<PersonResponse> getPersonsWithPartnerAndChildren() {
+    public String getPersonsWithPartnerAndChildren() {
         List<Person> persons = personRepository.findAll();
+        List<Person> filteredPersons = filterOnPartnerAndChildren(persons);
+        List<PersonResponse> personResponse = filteredPersons.stream().map(this::convertToPersonResponse).toList();
+        ResponseConverter responseConverter = new ResponseConverter();
+        return responseConverter.encodeToBase64(responseConverter.convertToCsv(personResponse));
+    }
+
+    public List<Person> filterOnPartnerAndChildren(List<Person> persons) {
         List<Person> filteredPersons = new ArrayList<Person>();
         for(Person person : persons) {
             if (person.getPartner().isPresent()) {
@@ -61,7 +69,7 @@ public class PersonService {
                 }
             }
         }
-        return filteredPersons.stream().map(this::convertToPersonResponse).collect(Collectors.toList());
+        return filteredPersons;
     }
 
     /**
