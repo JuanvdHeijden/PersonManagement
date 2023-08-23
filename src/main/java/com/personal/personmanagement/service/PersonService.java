@@ -2,6 +2,7 @@ package com.personal.personmanagement.service;
 
 import com.personal.personmanagement.model.BasicInformation;
 import com.personal.personmanagement.model.Person;
+import com.personal.personmanagement.model.PersonRequest;
 import com.personal.personmanagement.model.PersonResponse;
 import com.personal.personmanagement.repository.PersonRepository;
 import com.personal.personmanagement.utils.ResponseConverter;
@@ -70,6 +71,107 @@ public class PersonService {
             }
         }
         return filteredPersons;
+    }
+
+    /**
+     * Creates a new person using the provided person request.
+     *
+     * @param  personRequest  the person request object containing the necessary information to create a person
+     * @return                the newly created person
+     */
+    public Person createPerson(PersonRequest personRequest) {
+        Person parent1 = personRepository.findById(personRequest.getParent1Id())
+                .orElseThrow(() -> new IllegalArgumentException("Parent 1 with ID " + personRequest.getParent1Id() + " not found"));
+
+        Person parent2 = personRepository.findById(personRequest.getParent2Id())
+                .orElseThrow(() -> new IllegalArgumentException("Parent 2 with ID " + personRequest.getParent2Id() + " not found"));
+
+        Person partner = null;
+        if (personRequest.getPartnerId() != null) {
+            partner = personRepository.findById(personRequest.getPartnerId())
+                    .orElseThrow(() -> new IllegalArgumentException("Partner with ID " + personRequest.getPartnerId() + " not found"));
+        }
+
+        Person newPerson = new Person(personRequest.getName(), personRequest.getBirthDate(), parent1, parent2);
+        newPerson.setPartner(partner);
+
+        for (Long childId : personRequest.getChildrenIds()) {
+            Person child = personRepository.findById(childId)
+                    .orElseThrow(() -> new IllegalArgumentException("Child with ID " + childId + " not found"));
+            newPerson.addChild(child);
+        }
+
+        return personRepository.save(newPerson);
+    }
+
+    /**
+     * Deletes a person and updates related relationships accordingly.
+     *
+     * @param personId   The ID of the person to be deleted.
+     */
+    public void deletePerson(Long personId) {
+        Person personToDelete = personRepository.findById(personId)
+                .orElseThrow(() -> new IllegalArgumentException("Person with ID " + personId + " not found"));
+
+        // Remove the person from parent1's children if applicable
+        Person parent1 = personToDelete.getParent1();
+        if (parent1 != null) {
+            parent1.getChildren().remove(personToDelete);
+        }
+
+        // Remove the person from parent2's children if applicable
+        Person parent2 = personToDelete.getParent2();
+        if (parent2 != null) {
+            parent2.getChildren().remove(personToDelete);
+        }
+
+        // Update partner's relationship if applicable
+        Person partner = personToDelete.getPartner().orElse(null);
+        if (partner != null) {
+            partner.setPartner(null);
+        }
+
+        // Delete the person
+        personRepository.delete(personToDelete);
+    }
+
+    public PersonResponse updatePerson(Long personId, PersonRequest personRequest) {
+        Person personToUpdate = personRepository.findById(personId)
+                .orElseThrow(() -> new IllegalArgumentException("Person with ID " + personId + " not found"));
+
+        personToUpdate.setName(personRequest.getName());
+        personToUpdate.setBirthDate(personRequest.getBirthDate());
+
+        // Update parent1 and parent2 relationships if applicable
+        Person newParent1 = personRepository.findById(personRequest.getParent1Id())
+                .orElseThrow(() -> new IllegalArgumentException("Parent 1 with ID " + personRequest.getParent1Id() + " not found"));
+        personToUpdate.setParent1(newParent1);
+
+        Person newParent2 = personRepository.findById(personRequest.getParent2Id())
+                .orElseThrow(() -> new IllegalArgumentException("Parent 2 with ID " + personRequest.getParent2Id() + " not found"));
+        personToUpdate.setParent2(newParent2);
+
+        // Update partner relationship if applicable
+        if (personRequest.getPartnerId() != null) {
+            Person newPartner = personRepository.findById(personRequest.getPartnerId())
+                    .orElseThrow(() -> new IllegalArgumentException("Partner with ID " + personRequest.getPartnerId() + " not found"));
+            personToUpdate.setPartner(newPartner);
+        } else {
+            personToUpdate.setPartner(null);
+        }
+
+        // Update children relationships if applicable
+        if (personRequest.getChildrenIds() != null) {
+            Set<Person> newChildren = personRequest.getChildrenIds().stream()
+                    .map(childId -> personRepository.findById(childId)
+                            .orElseThrow(() -> new IllegalArgumentException("Child with ID " + childId + " not found")))
+                    .collect(Collectors.toSet());
+            personToUpdate.setChildren(newChildren);
+        }
+
+        personRepository.save(personToUpdate);
+
+        return convertToPersonResponse(personToUpdate);
     }
 
     /**
