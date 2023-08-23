@@ -22,12 +22,10 @@ public class PersonController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<PersonResponse>> getAll() {
-        try {
-            return ResponseEntity.ok(personService.getAllPersons());
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<List<PersonResponse>> getAllPersonsSorted(
+            @RequestParam(defaultValue = "") String sortBy) {
+        List<PersonResponse> sortedPersons = personService.getAllPersons(sortBy);
+        return ResponseEntity.ok(sortedPersons);
     }
 
     @GetMapping("/filter")

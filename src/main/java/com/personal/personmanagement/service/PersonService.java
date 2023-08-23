@@ -7,6 +7,7 @@ import com.personal.personmanagement.model.PersonResponse;
 import com.personal.personmanagement.repository.PersonRepository;
 import com.personal.personmanagement.utils.ResponseConverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -31,15 +32,19 @@ public class PersonService {
      *
      * @return         	A list of PersonResponse objects representing all persons.
      */
-    public List<PersonResponse> getAllPersons() {
-
-        List<Person> persons = personRepository.findAll();
-        List<PersonResponse> personResponse = new ArrayList<PersonResponse>();
-        for(Person person : persons) {
-            personResponse.add(convertToPersonResponse(person));
+    public List<PersonResponse> getAllPersons(String sortBy) {
+        List<Person> persons;
+        if ("name".equals(sortBy)) {
+            persons = personRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
+        } else if ("id".equals(sortBy)) {
+            persons = personRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+        } else if ("".equals(sortBy)){
+            persons = personRepository.findAll();
+        } else {
+            throw new IllegalArgumentException("Invalid sort option: " + sortBy);
         }
 
-        return personResponse;
+        return persons.stream().map(this::convertToPersonResponse).collect(Collectors.toList());
     }
 
     /**

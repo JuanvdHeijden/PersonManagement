@@ -42,7 +42,7 @@ class PersonServiceTest {
         when(personRepository.findAll()).thenReturn(mockPersons);
 
         // Call the function
-        List<PersonResponse> result = personService.getAllPersons();
+        List<PersonResponse> result = personService.getAllPersons("");
 
         // Check the result
         assertEquals(mockPersons.size(), result.size());
