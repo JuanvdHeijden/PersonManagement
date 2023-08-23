@@ -25,4 +25,13 @@ public class PersonController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<PersonResponse>> getPersonsWithPartnerAndChildren() {
+        try {
+            return ResponseEntity.ok(personService.getPersonsWithPartnerAndChildren());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }
