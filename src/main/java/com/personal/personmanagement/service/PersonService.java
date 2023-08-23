@@ -35,7 +35,10 @@ public class PersonService {
     private PersonResponse convertToPersonResponse(Person person) {
         BasicInformation parent1 = new BasicInformation(person.getParent1().getId(), person.getParent1().getName(), person.getParent1().getBirthDate());
         BasicInformation parent2 = new BasicInformation(person.getParent2().getId(), person.getParent2().getName(), person.getParent2().getBirthDate());
-        BasicInformation partner = new BasicInformation(person.getPartner().getId(), person.getPartner().getName(), person.getPartner().getBirthDate());
+        BasicInformation partner = null;
+        if(person.getPartner().isPresent()) {
+            partner = new BasicInformation(person.getPartner().get().getId(), person.getPartner().get().getName(), person.getPartner().get().getBirthDate());
+        }
         Set<BasicInformation> children = new HashSet<>();
         for(Person child : person.getChildren()) {
             BasicInformation childInfo = new BasicInformation(child.getId(), child.getName(), child.getBirthDate());

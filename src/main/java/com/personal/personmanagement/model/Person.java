@@ -41,6 +41,10 @@ public class Person {
     @ManyToOne
     private Person partner;
 
+    public Optional<Person> getPartner() {
+        return Optional.ofNullable(partner);
+    }
+
     public Person(@NonNull String name, @NonNull LocalDate birthDate) {
         this.name = name;
         this.birthDate = birthDate;
@@ -56,14 +60,16 @@ public class Person {
         this.parent1 = parent1;
         this.parent2 = parent2;
         this.children = new HashSet<Person>();
+        this.partner = null;
     }
 
-    public Person(@NonNull String name, @NonNull LocalDate birthDate, @NonNull Person parent1, @NonNull Person parent2, @NonNull Set<Person> children) {
+    public Person(@NonNull String name, @NonNull LocalDate birthDate, @NonNull Person parent1, @NonNull Person parent2, Set<Person> children) {
         this.name = name;
         this.birthDate = birthDate;
         this.parent1 = parent1;
         this.parent2 = parent2;
         this.children = children;
+        this.partner = null;
     }
     public Person(@NonNull String name, @NonNull LocalDate birthDate, @NonNull Person parent1, @NonNull Person parent2, Set<Person> children, Person partner) {
         this.name = name;

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.Set;
 
 @Getter
@@ -23,6 +24,10 @@ public class PersonResponse {
     private BasicInformation parent2;
     @JsonProperty("partner")
     private BasicInformation partner;
+
+    public Optional<BasicInformation> getPartner() {
+        return Optional.ofNullable(partner);
+    }
 
     public PersonResponse(Long id, String name, LocalDate birthDate, BasicInformation parent1, BasicInformation parent2, Set<BasicInformation> children, BasicInformation partner) {
         this.id = id;
