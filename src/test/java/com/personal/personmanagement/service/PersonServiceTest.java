@@ -6,7 +6,6 @@ import com.personal.personmanagement.repository.PersonRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDate;
@@ -125,5 +124,6 @@ class PersonServiceTest {
         String expectedResult = "SWQsTmFtZSxCaXJ0aERhdGUsUGFyZW50MSxQYXJlbnQyLFBhcnRuZXIK";
         assertEquals(expectedResult, result);
     }
+
 
 }

@@ -61,7 +61,8 @@ public class PersonService {
         return responseConverter.encodeToBase64(responseConverter.convertToCsv(personResponse));
     }
 
-    public List<Person> filterOnPartnerAndChildren(List<Person> persons) {
+
+    private List<Person> filterOnPartnerAndChildren(List<Person> persons) {
         List<Person> filteredPersons = new ArrayList<Person>();
         for(Person person : persons) {
             if (person.getPartner().isPresent()) {

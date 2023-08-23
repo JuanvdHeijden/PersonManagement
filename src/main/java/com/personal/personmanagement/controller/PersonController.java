@@ -1,12 +1,8 @@
 package com.personal.personmanagement.controller;
 
-import com.personal.personmanagement.model.BasicInformation;
-import com.personal.personmanagement.model.Person;
 import com.personal.personmanagement.model.PersonRequest;
 import com.personal.personmanagement.model.PersonResponse;
 import com.personal.personmanagement.service.PersonService;
-import com.personal.personmanagement.utils.ResponseConverter;
-import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
