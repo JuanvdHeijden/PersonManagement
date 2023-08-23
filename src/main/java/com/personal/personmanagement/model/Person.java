@@ -84,4 +84,7 @@ public class Person {
 
     }
 
+    public void addChild(Person child1) {
+        this.children.add(child1);
+    }
 }
