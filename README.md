@@ -14,11 +14,11 @@ This application is purely for demo purposes and has specific requirements.
 # How to Run
 Run the following commands
 ```agsl
-gradle build
+./gradlew build
 ```
 
 ```agsl
-gradle bootRun
+./gradlew bootRun
 ```
 
 By default, the application will run on localhost at port 8080.
