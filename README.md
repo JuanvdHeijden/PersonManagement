@@ -6,6 +6,11 @@ It is based on Spring JPA and contains a simple h2 database with Persons in it. 
 The idea of this repository is to show my personal capabilities with Java, and Spring Boot & Spring JPA in particular.
 This application is purely for demo purposes and has specific requirements.
 
+# Prerequisites
+
+- Java 17 or higher
+- Gradle
+
 # How to Run
 Run the following commands
 ```agsl
