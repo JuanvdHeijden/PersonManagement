@@ -65,7 +65,7 @@ public class Person {
         this.parent2 = parent2;
         this.children = children;
     }
-    public Person(String name, LocalDate birthDate, Person parent1, Person parent2, Set<Person> children, Person partner) {
+    public Person(@NonNull String name, @NonNull LocalDate birthDate, @NonNull Person parent1, @NonNull Person parent2, Set<Person> children, Person partner) {
         this.name = name;
         this.birthDate = birthDate;
         this.parent1 = parent1;

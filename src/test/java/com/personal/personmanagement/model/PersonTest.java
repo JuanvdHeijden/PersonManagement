@@ -18,8 +18,10 @@ class PersonTest {
     }
 
     @Test
-    void testInitPersonWithNullName() {
+    void testInitPersonWithNullValues() {
         assertThrows(NullPointerException.class, () -> new Person(null, LocalDate.now()));
+        assertThrows(NullPointerException.class, () -> new Person("Max", null));
+        assertThrows(NullPointerException.class, () -> new Person("Max", LocalDate.now(), null, null));
     }
 
 }
